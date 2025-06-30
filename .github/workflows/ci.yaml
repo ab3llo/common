@@ -18,21 +18,21 @@ jobs:
           go-version: '1.24.4'
 
       - name: Build 
-        run: go build -v ./common/...
+        run: go build -v ./...
       
       - name: Run Tests
-        run: go test -v ./common/...
+        run: go test -v ./...
 
       - name: make proto
         run: make gen-proto
-    changelog:
-    - name: Generate Changelog
-      run: |
-        git fetch --prune --unshallow
-        git log origin/main..HEAD --pretty=format:"%h %s" > CHANGELOG.md
-        echo "Changelog generated successfully."
-    
-    - name: Commit and Push Changelog
-      run: |
-        git config user.name "GitHub Actions"
-        git config user.email "
+
+      - name: Generate Changelog
+        run: |
+          git fetch --prune --unshallow
+          git log origin/main..HEAD --pretty=format:"%h %s" > CHANGELOG.md
+          echo "Changelog generated successfully."
+
+      - name: Commit and Push Changelog
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "
