@@ -1,4 +1,4 @@
-module github.com/hmlylab/hmly/common
+module github.com/hmlylab/common
 
 go 1.24.4
 
