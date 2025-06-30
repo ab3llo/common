@@ -28,14 +28,6 @@ jobs:
       - name: Run Tests
         run: go test -v ./...
 
-      - name: Installing protoc-gen-go
-        run: |
-          go get github.com/golang/protobuf/protoc-gen-go
-          go get google.golang.org/grpc/cmd/protoc-gen-go-grpc  
-
-      - name: make proto
-        run: make gen-proto
-
       - name: Generate Changelog
         run: |
           git fetch --prune --unshallow
@@ -44,5 +36,5 @@ jobs:
 
       - name: Commit and Push Changelog
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email "
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
