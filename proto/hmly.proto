@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+option go_package = "github.com/hmlylab/hmly/common/proto";
+
+package api;
+
+
+service HouseholdService {
+    rpc CreateHousehold(CreateHouseholdRequest) returns (HouseholdResponse);
+    rpc GetHousehold(GetHouseholdRequest) returns (HouseholdResponse);
+    rpc GetHouseholds(GetHouseHoldsRequest) returns (HouseholdsResponse);
+    rpc UpdateHousehold(UpdateHouseholdRequest) returns (HouseholdResponse);
+    rpc DeleteHousehold(GetHouseholdRequest) returns (HouseholdResponse);
+}
+
+message CreateHouseholdRequest {
+    string name = 1;
+}
+
+message GetHouseholdRequest {
+    string household_id = 1;
+}
+
+message GetHouseHoldsRequest {
+    int32 offset = 1;
+    int32 limit = 2;
+}
+
+message UpdateHouseholdRequest {
+    string household_id = 1;
+    string name = 2;
+}
+
+message CreateHouseholdResponse {
+    string household_id = 1;
+    string name = 2;
+    optional Error error_message = 3;
+}
+
+message HouseholdResponse {
+    string id = 1;
+    string name = 2;
+    optional Error error_message = 3;
+}
+
+message Error {
+    int32 code = 1;
+    string message = 2;
+}
+
+message HouseholdsResponse {
+    repeated HouseholdResponse households = 1;
+    optional Error error_message = 2;
+}

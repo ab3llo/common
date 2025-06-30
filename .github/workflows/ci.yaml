@@ -1,0 +1,38 @@
+name: Hmly Common Pkg 
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.24.4'
+
+      - name: Build 
+        run: go build -v ./common/...
+      
+      - name: Run Tests
+        run: go test -v ./common/...
+
+      - name: make proto
+        run: make gen-proto
+    changelog:
+    - name: Generate Changelog
+      run: |
+        git fetch --prune --unshallow
+        git log origin/main..HEAD --pretty=format:"%h %s" > CHANGELOG.md
+        echo "Changelog generated successfully."
+    
+    - name: Commit and Push Changelog
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "
