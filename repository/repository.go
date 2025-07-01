@@ -10,6 +10,7 @@ type Repository[T any] interface {
 	Create(ctx context.Context, model *T) (*T, error)
 	Get(ctx context.Context, id string) (*T, error)
 	GetAll(ctx context.Context, limit, offset int) ([]T, error)
+	GetAllByField(ctx context.Context, fieldName, fieldValue string) ([]T, error)
 	Update(ctx context.Context, id string, model *T) (*T, error)
 	Delete(ctx context.Context, id string) error
 }
@@ -42,6 +43,17 @@ func (r *repository[T]) Get(ctx context.Context, id string) (*T, error) {
 func (r *repository[T]) GetAll(ctx context.Context, limit, offset int) ([]T, error) {
 	var models []T
 	if err := r.DB.Limit(limit).Offset(offset).Find(&models).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, gorm.ErrRecordNotFound
+		}
+		return nil, err
+	}
+	return models, nil
+}
+
+func (r *repository[T]) GetAllByField(ctx context.Context, fieldName, fieldValue string) ([]T, error) {
+	var models []T
+	if err := r.DB.Find(&models, "? = ?", fieldName, fieldValue).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, gorm.ErrRecordNotFound
 		}
