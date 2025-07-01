@@ -53,7 +53,8 @@ func (r *repository[T]) GetAll(ctx context.Context, limit, offset int) ([]T, err
 
 func (r *repository[T]) GetAllByField(ctx context.Context, fieldName, fieldValue string) ([]T, error) {
 	var models []T
-	if err := r.DB.Find(&models, "? = ?", fieldName, fieldValue).Error; err != nil {
+	var query = fmt.Sprintf("%s = ?", fieldName)
+	if err := r.DB.Find(&models, query, fieldValue).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, gorm.ErrRecordNotFound
 		}
