@@ -50,6 +50,17 @@ func (r *repository[T]) GetAll(ctx context.Context, limit, offset int) ([]T, err
 	return models, nil
 }
 
+func (r *repository[T]) GetAllByField(ctx context.Context, fieldName, fieldValue string) ([]T, error) {
+	var models []T
+	if err := r.DB.Find(&models, "? = ?", fieldName, fieldValue).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, gorm.ErrRecordNotFound
+		}
+		return nil, err
+	}
+	return models, nil
+}
+
 func (r *repository[T]) Update(ctx context.Context, id string, model *T) (*T, error) {
 	var existing T
 	if err := r.DB.First(&existing, "id = ?", id).Error; err != nil {
