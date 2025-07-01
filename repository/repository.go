@@ -3,7 +3,13 @@ package repository
 import (
 	"context"
 	"fmt"
+
+	"github.com/hmlylab/common/logger"
 	"gorm.io/gorm"
+)
+
+var (
+	log = logger.NewLogger()
 )
 
 type Repository[T any] interface {
@@ -25,6 +31,7 @@ func NewRepository[T any](db *gorm.DB) Repository[T] {
 
 func (r *repository[T]) Create(ctx context.Context, model *T) (*T, error) {
 	if err := r.DB.Create(&model).Error; err != nil {
+		log.Error(err.Error())
 		return nil, err
 	}
 	return model, nil
@@ -34,6 +41,7 @@ func (r *repository[T]) Get(ctx context.Context, id string) (*T, error) {
 	var model T
 	if err := r.DB.First(&model, "id = ?", id).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
+			log.Error(err.Error())
 			return nil, gorm.ErrRecordNotFound
 		}
 		return nil, err
@@ -44,6 +52,7 @@ func (r *repository[T]) GetAll(ctx context.Context, limit, offset int) ([]T, err
 	var models []T
 	if err := r.DB.Limit(limit).Offset(offset).Find(&models).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
+			log.Error(err.Error())
 			return nil, gorm.ErrRecordNotFound
 		}
 		return nil, err
@@ -56,6 +65,7 @@ func (r *repository[T]) GetAllByField(ctx context.Context, fieldName, fieldValue
 	var query = fmt.Sprintf("%s = ?", fieldName)
 	if err := r.DB.Find(&models, query, fieldValue).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
+			log.Error(err.Error())
 			return nil, gorm.ErrRecordNotFound
 		}
 		return nil, err
@@ -67,6 +77,7 @@ func (r *repository[T]) Update(ctx context.Context, id string, model *T) (*T, er
 	var existing T
 	if err := r.DB.First(&existing, "id = ?", id).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
+			log.Error(err.Error())
 			return nil, gorm.ErrRecordNotFound
 		}
 		return nil, err
@@ -81,6 +92,7 @@ func (r *repository[T]) Delete(ctx context.Context, id string) error {
 	var existing T
 	if err := r.DB.Delete(&existing, "id = ?", id).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
+			log.Error(err.Error())
 			return gorm.ErrRecordNotFound
 		}
 		return err
