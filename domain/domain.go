@@ -14,10 +14,6 @@ type BaseModel struct {
 	UpdatedAt time.Time `json:"updated_at"`
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 }
-type Household struct {
-	BaseModel
-	Name string `json:"name"`
-}
 
 func (m *BaseModel) IsValid() bool {
 	if m.ID == "" {
