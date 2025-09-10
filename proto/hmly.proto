@@ -1,0 +1,195 @@
+syntax = "proto3";
+
+option go_package = "github.com/hmlylab/common/proto";
+
+package api;
+
+service HouseholdService {
+    rpc CreateHousehold(CreateHouseholdRequest) returns (HouseholdResponse);
+    rpc GetHousehold(GetHouseholdRequest) returns (HouseholdResponse);
+    rpc GetHouseholds(GetHouseHoldsRequest) returns (HouseholdsResponse);
+    rpc UpdateHousehold(UpdateHouseholdRequest) returns (HouseholdResponse);
+    rpc DeleteHousehold(GetHouseholdRequest) returns (HouseholdResponse);
+}
+
+service MemberService {
+    rpc CreateMember(CreateMemberRequest) returns (MemberResponse);
+    rpc GetMember(GetMemberRequest) returns (MemberResponse);
+    rpc GetMembers(GetMembersRequest) returns (MembersResponse);
+    rpc UpdateMember(UpdateMemberRequest) returns (MemberResponse);
+    rpc DeleteMember(GetMemberRequest) returns (MemberResponse);
+}
+
+service MealService {
+    rpc CreateMeal(CreateMealRequest) returns (MealResponse);
+    rpc GetMeal(GetMealRequest) returns (MealResponse);
+    rpc GetMeals(GetMealsRequest) returns (MealsResponse);
+    rpc UpdateMeal(UpdateMealRequest) returns (MealResponse);
+    rpc DeleteMeal(GetMealRequest) returns (MealResponse);
+}
+
+service EventService {
+    rpc CreateEvent(CreateEventRequest) returns (EventResponse);
+    rpc GetEvent(GetEventRequest) returns (EventResponse);
+    rpc GetEvents(GetEventsRequest) returns (EventsResponse);
+    rpc UpdateEvent(UpdateEventRequest) returns (EventResponse);
+    rpc DeleteEvent(GetEventRequest) returns (EventResponse);
+}   
+
+message CreateHouseholdRequest {
+    string name = 1;
+}
+
+message GetHouseholdRequest {
+    string household_id = 1;
+}
+
+message GetHouseHoldsRequest {
+    int32 offset = 1;
+    int32 limit = 2;
+}
+
+message UpdateHouseholdRequest {
+    string household_id = 1;
+    string name = 2;
+}
+
+message CreateHouseholdResponse {
+    string household_id = 1;
+    string name = 2;
+    optional Error error_message = 3;
+}
+
+message HouseholdResponse {
+    string id = 1;
+    string name = 2;
+    optional Error error_message = 3;
+}
+
+message Error {
+    int32 code = 1;
+    string message = 2;
+}
+
+message HouseholdsResponse {
+    repeated HouseholdResponse households = 1;
+    optional Error error_message = 2;
+}
+
+message CreateMemberRequest {
+    string household_id = 1;
+    string user_id = 2;
+}
+
+message GetMemberRequest {
+    string member_id = 1;
+}
+
+message GetMembersRequest {
+    string household_id = 1;
+}
+
+message UpdateMemberRequest {
+    string member_id = 1;
+    string household_id = 2;
+    string user_id = 3;
+}
+
+message MemberResponse {
+    string id = 1;
+    string household_id = 2;
+    string user_id = 3;
+    optional Error error_message = 4;
+}
+
+message MembersResponse {
+    repeated MemberResponse members = 1;
+    optional Error error_message = 2;
+}
+
+message CreateMealRequest {
+    string name = 1;
+    string household_id = 2;
+}   
+
+
+message GetMealRequest {
+    string meal_id = 1;
+}
+
+message GetMealsRequest {
+    string household_id = 1;
+}
+
+message UpdateMealRequest {
+    string meal_id = 1;
+    string name = 2;
+    string household_id = 4;
+}
+
+message MealResponse {
+    string id = 1;
+    string name = 2;
+    string household_id = 3;
+    optional Error error_message = 4;
+}
+
+message MealsResponse {
+    repeated MealResponse meals = 1;
+    optional Error error_message = 2;
+}
+
+message CreateEventRequest {
+    string name = 1;
+    string entity_id = 2;
+    string entity_type = 3;
+    string start_date = 4;
+    string end_date = 5;
+    string assigned_to = 6;
+}
+
+message GetEventRequest {
+    string event_id = 1;
+}   
+
+message GetEventsRequest {
+    string entityType = 1;
+    int32 offset = 2;
+    int32 limit = 3;
+}
+
+message UpdateEventRequest {
+    string event_id = 1;
+    string name = 2;
+    string entity_id = 3;
+    string entity_type = 4;
+    string start_date = 5;
+    string end_date = 6;
+    string assigned_to = 7;
+}
+
+message EventResponse {
+    string id = 1;
+    string name = 2;
+    string entity_id = 3;
+    string entity_type = 4;
+    string start_date = 5;
+    string end_date = 6;
+    string assigned_to = 7;
+    optional Error error_message = 8;
+}
+
+message EventsResponse {
+    repeated EventResponse events = 1;
+    optional Error error_message = 2;
+}
+
+message VerifyTokenRequest {
+    string token = 1;
+}   
+
+message VerifyTokenResponse {
+    bool valid = 1;
+    string user_id = 2;
+    optional Error error_message = 3;
+}
