@@ -9,8 +9,8 @@ type Config struct {
 	Env         string `mapstructure:"ENV"`
 	DSN         string `mapstructure:"DSN"`
 	PORT        string `mapstructure:"PORT"`
-	GCPProject  string `mapstructure:"GOOGLE_CLOUD_PROJECT"`
-	GCPRegion   string `mapstructure:"GOOGLE_CLOUD_REGION"`
+	GCPProject  string `mapstructure:"GCP_PROJECT"`
+	GCPRegion   string `mapstructure:"GCP_REGION"`
 
 	ClerkAPIKey string `mapstructure:"CLERK_API_KEY"`
 	ConsulHost  string `mapstructure:"CONSUL_HOST"`
