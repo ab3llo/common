@@ -74,3 +74,23 @@ func TestWriteError(t *testing.T) {
 		t.Errorf("expected error message, got %v", resp)
 	}
 }
+
+func BenchmarkWriteJSON(b *testing.B) {
+	data := map[string]string{"foo": "bar", "baz": "qux"}
+	for i := 0; i < b.N; i++ {
+		recorder := httptest.NewRecorder()
+		WriteJSON(recorder, http.StatusOK, data)
+	}
+}
+
+func BenchmarkReadJSON(b *testing.B) {
+	data := map[string]string{"foo": "bar"}
+	body, _ := json.Marshal(data)
+
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		req := httptest.NewRequest("POST", "/", bytes.NewReader(body))
+		var out map[string]string
+		ReadJSON(req, &out)
+	}
+}
