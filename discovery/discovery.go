@@ -76,9 +76,30 @@ func RegisterService(serviceName, grpcAddr, gcpProject, gcpRegion, namespace str
 		},
 	}
 
-	_, err = client.CreateService(ctx, serviceReq)
+	srv, err := client.CreateService(ctx, serviceReq)
+
 	if err != nil {
 		log.Error("Failed to create service: " + err.Error())
+		// Proceed even if service creation fails, it might already exist
+	}
+
+	_, err = client.CreateEndpoint(
+		ctx,
+		&servicedirectorypb.CreateEndpointRequest{
+			Parent:     parent,
+			EndpointId: serviceName + "-endpoint",
+			Endpoint: &servicedirectorypb.Endpoint{
+				Address: grpcAddr,
+				Port:    int32(parsePort(grpcAddr)),
+				Annotations: map[string]string{
+					"key1": "value1",
+					"key2": "value2",
+				},
+			},
+		},
+	)
+	if err != nil {
+		log.Error("Failed to create endpoint: " + err.Error())
 		// Proceed even if service creation fails, it might already exist
 	}
 
