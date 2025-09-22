@@ -86,7 +86,7 @@ func RegisterService(serviceName, grpcAddr, gcpProject, gcpRegion, namespace str
 	_, err = client.CreateEndpoint(
 		ctx,
 		&servicedirectorypb.CreateEndpointRequest{
-			Parent:     parent,
+			Parent:     srv.Name,
 			EndpointId: serviceName + "-endpoint",
 			Endpoint: &servicedirectorypb.Endpoint{
 				Address: grpcAddr,
