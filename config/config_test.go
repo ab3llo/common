@@ -39,8 +39,8 @@ func TestLoadConfig(t *testing.T) {
 				"CLERK_API_KEY":        "test-api-key",
 				"CONSUL_HOST":          "localhost",
 				"CONSUL_PORT":          "8501",
-				"GOOGLE_CLOUD_PROJECT": "test-project",
-				"GOOGLE_CLOUD_REGION":  "us-central1",
+				"GCP_PROJECT": "test-project",
+				"GCP_REGION":  "us-central1",
 			},
 			expectedCfg: Config{
 				ServiceName: "test-service",

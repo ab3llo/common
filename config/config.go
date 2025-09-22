@@ -26,8 +26,8 @@ func LoadConfig(path string) (Config, error) {
 	viper.SetDefault("PORT", "8080")
 	viper.SetDefault("SERVICE_NAME", "gateway")
 	viper.SetDefault("ENV", "dev")
-	viper.SetDefault("GOOGLE_CLOUD_PROJECT", "")
-	viper.SetDefault("GOOGLE_CLOUD_REGION", "")
+	viper.SetDefault("GCP_PROJECT", "")
+	viper.SetDefault("GCP_REGION", "")
 
 	// Configure viper
 	viper.AddConfigPath(path)
