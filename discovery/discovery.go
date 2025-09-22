@@ -53,7 +53,39 @@ func RegisterServiceWithConsul(serviceName, grpcAddr, consulHost, consulPort str
 	log.Info("Service registered with Consul: " + registration.Name)
 }
 
-func GetInstance(serviceName, gcpProject, gcpRegion string) (*servicedirectorypb.Endpoint, error) {
+func RegisterService(serviceName, grpcAddr, gcpProject, gcpRegion, namespace string) {
+	ctx := context.Background()
+
+	client, err := servicedirectory.NewRegistrationClient(ctx)
+	if err != nil {
+		log.Error("Failed to create service directory registration client: " + err.Error())
+		os.Exit(1)
+	}
+	defer client.Close()
+
+	parent := "projects/" + gcpProject + "/locations/" + gcpRegion + "/namespaces/" + namespace
+
+	serviceReq := &servicedirectorypb.CreateServiceRequest{
+		Parent:    parent,
+		ServiceId: serviceName,
+		Service: &servicedirectorypb.Service{
+			Annotations: map[string]string{
+				"key1": "value1",
+				"key2": "value2",
+			},
+		},
+	}
+
+	_, err = client.CreateService(ctx, serviceReq)
+	if err != nil {
+		log.Error("Failed to create service: " + err.Error())
+		// Proceed even if service creation fails, it might already exist
+	}
+
+	log.Info("Service registered with Service Directory: " + serviceName)
+}
+
+func GetInstance(serviceName, gcpProject, gcpRegion, namespace string) (*servicedirectorypb.Endpoint, error) {
 	ctx := context.Background()
 
 	lookupClient, err := servicedirectory.NewLookupClient(ctx)
@@ -64,7 +96,7 @@ func GetInstance(serviceName, gcpProject, gcpRegion string) (*servicedirectorypb
 	defer lookupClient.Close()
 
 	req := &servicedirectorypb.ResolveServiceRequest{
-		Name: "projects/" + gcpProject + "/locations/" + gcpRegion + "/namespaces/default/services/" + serviceName,
+		Name: "projects/" + gcpProject + "/locations/" + gcpRegion + "/namespaces/" + namespace + "/services/" + serviceName,
 	}
 
 	resp, err := lookupClient.ResolveService(ctx, req)

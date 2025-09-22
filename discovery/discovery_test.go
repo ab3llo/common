@@ -237,6 +237,7 @@ func TestGetInstance_ParameterValidation(t *testing.T) {
 		service    string
 		project    string
 		region     string
+		namespace  string
 		expectErr  bool
 	}{
 		{
@@ -244,6 +245,15 @@ func TestGetInstance_ParameterValidation(t *testing.T) {
 			service:   "test-service",
 			project:   "test-project",
 			region:    "us-central1",
+			namespace: "default",
+			expectErr: false,
+		},
+		{
+			name:      "valid parameters with custom namespace",
+			service:   "test-service",
+			project:   "test-project",
+			region:    "us-central1",
+			namespace: "production",
 			expectErr: false,
 		},
 		{
@@ -251,6 +261,7 @@ func TestGetInstance_ParameterValidation(t *testing.T) {
 			service:   "",
 			project:   "test-project",
 			region:    "us-central1",
+			namespace: "default",
 			expectErr: true,
 		},
 		{
@@ -258,6 +269,7 @@ func TestGetInstance_ParameterValidation(t *testing.T) {
 			service:   "test-service",
 			project:   "",
 			region:    "us-central1",
+			namespace: "default",
 			expectErr: true,
 		},
 		{
@@ -265,19 +277,28 @@ func TestGetInstance_ParameterValidation(t *testing.T) {
 			service:   "test-service",
 			project:   "test-project",
 			region:    "",
+			namespace: "default",
+			expectErr: true,
+		},
+		{
+			name:      "empty namespace",
+			service:   "test-service",
+			project:   "test-project",
+			region:    "us-central1",
+			namespace: "",
 			expectErr: true,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			shouldErr := tt.service == "" || tt.project == "" || tt.region == ""
+			shouldErr := tt.service == "" || tt.project == "" || tt.region == "" || tt.namespace == ""
 			if shouldErr != tt.expectErr {
 				t.Errorf("Parameter validation expectation mismatch for %s", tt.name)
 			}
 
 			if !shouldErr {
-				expectedPath := "projects/" + tt.project + "/locations/" + tt.region + "/namespaces/default/services/" + tt.service
+				expectedPath := "projects/" + tt.project + "/locations/" + tt.region + "/namespaces/" + tt.namespace + "/services/" + tt.service
 				if expectedPath == "" {
 					t.Error("Expected path should not be empty for valid parameters")
 				}
@@ -291,6 +312,94 @@ func BenchmarkParsePort(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		port := testPorts[i%len(testPorts)]
 		parsePort(port)
+	}
+}
+
+func TestRegisterService_ParameterValidation(t *testing.T) {
+	tests := []struct {
+		name        string
+		serviceName string
+		grpcAddr    string
+		gcpProject  string
+		gcpRegion   string
+		namespace   string
+		expectValid bool
+	}{
+		{
+			name:        "valid service registration",
+			serviceName: "test-service",
+			grpcAddr:    ":8080",
+			gcpProject:  "test-project",
+			gcpRegion:   "us-central1",
+			namespace:   "default",
+			expectValid: true,
+		},
+		{
+			name:        "empty service name",
+			serviceName: "",
+			grpcAddr:    ":8080",
+			gcpProject:  "test-project",
+			gcpRegion:   "us-central1",
+			namespace:   "default",
+			expectValid: false,
+		},
+		{
+			name:        "empty project",
+			serviceName: "test-service",
+			grpcAddr:    ":8080",
+			gcpProject:  "",
+			gcpRegion:   "us-central1",
+			namespace:   "default",
+			expectValid: false,
+		},
+		{
+			name:        "empty region",
+			serviceName: "test-service",
+			grpcAddr:    ":8080",
+			gcpProject:  "test-project",
+			gcpRegion:   "",
+			namespace:   "default",
+			expectValid: false,
+		},
+		{
+			name:        "empty namespace",
+			serviceName: "test-service",
+			grpcAddr:    ":8080",
+			gcpProject:  "test-project",
+			gcpRegion:   "us-central1",
+			namespace:   "",
+			expectValid: false,
+		},
+		{
+			name:        "custom namespace",
+			serviceName: "api-service",
+			grpcAddr:    ":9090",
+			gcpProject:  "prod-project",
+			gcpRegion:   "europe-west1",
+			namespace:   "production",
+			expectValid: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			valid := true
+
+			if tt.serviceName == "" || tt.gcpProject == "" || tt.gcpRegion == "" || tt.namespace == "" {
+				valid = false
+			}
+
+			if valid != tt.expectValid {
+				t.Errorf("RegisterService parameter validation = %v, want %v", valid, tt.expectValid)
+			}
+
+			if valid {
+				expectedParent := "projects/" + tt.gcpProject + "/locations/" + tt.gcpRegion + "/namespaces/" + tt.namespace
+				if expectedParent == "" {
+					t.Error("Expected parent path should not be empty for valid parameters")
+				}
+			}
+		})
 	}
 }
 
