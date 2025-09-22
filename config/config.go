@@ -8,8 +8,7 @@ type Config struct {
 	ServiceName string `mapstructure:"SERVICE_NAME"`
 	Env         string `mapstructure:"ENV"`
 	DSN         string `mapstructure:"DSN"`
-	HTTPAddr    string `mapstructure:"HTTP_ADDR"`
-	GRPCAddr    string `mapstructure:"GRPC_ADDR"`
+	PORT        string `mapstructure:"PORT"`
 	GCPProject  string `mapstructure:"GOOGLE_CLOUD_PROJECT"`
 	GCPRegion   string `mapstructure:"GOOGLE_CLOUD_REGION"`
 
@@ -24,8 +23,7 @@ func LoadConfig(path string) (Config, error) {
 	viper.SetDefault("CONSUL_HOST", "consul")
 	viper.SetDefault("CONSUL_PORT", "8500")
 	viper.SetDefault("DSN", "postgresql://postgres:postgres@127.0.0.1:54322/postgres")
-	viper.SetDefault("HTTP_ADDR", ":8080")
-	viper.SetDefault("GRPC_ADDR", ":50051")
+	viper.SetDefault("PORT", "8080")
 	viper.SetDefault("SERVICE_NAME", "gateway")
 	viper.SetDefault("ENV", "dev")
 	viper.SetDefault("GOOGLE_CLOUD_PROJECT", "")
