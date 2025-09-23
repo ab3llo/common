@@ -1,12 +1,10 @@
 package discovery
 
 import (
-	"context"
+	"math/rand"
 	"os"
 	"strconv"
 
-	servicedirectory "cloud.google.com/go/servicedirectory/apiv1"
-	"cloud.google.com/go/servicedirectory/apiv1/servicedirectorypb"
 	consulapi "github.com/hashicorp/consul/api"
 	"github.com/hmlylab/common/logger"
 )
@@ -24,9 +22,9 @@ func parsePort(portStr string) int {
 	return port
 }
 
-func RegisterServiceWithConsul(serviceName, grpcAddr, consulHost, consulPort string) {
+func RegisterServiceWithConsul(serviceName, addr, consulHost, consulPort string) {
 	consulConfig := consulapi.DefaultConfig()
-	consulConfig.Address = consulHost + ":" + consulPort
+	consulConfig.Address = resolveConsulAddress(consulPort, consulHost)
 	client, err := consulapi.NewClient(consulConfig)
 	if err != nil {
 		log.Error("Failed to create Consul client: " + err.Error())
@@ -34,7 +32,7 @@ func RegisterServiceWithConsul(serviceName, grpcAddr, consulHost, consulPort str
 	}
 
 	// Extract port from grpcAddr (e.g., ":5001" -> "5001")
-	port := grpcAddr
+	port := addr
 	if port[0] == ':' {
 		port = port[1:]
 	}
@@ -53,89 +51,9 @@ func RegisterServiceWithConsul(serviceName, grpcAddr, consulHost, consulPort str
 	log.Info("Service registered with Consul: " + registration.Name)
 }
 
-func RegisterService(serviceName, grpcAddr, gcpProject, gcpRegion, namespace string) {
-	ctx := context.Background()
-
-	client, err := servicedirectory.NewRegistrationClient(ctx)
-	if err != nil {
-		log.Error("Failed to create service directory registration client: " + err.Error())
-		os.Exit(1)
-	}
-	defer client.Close()
-
-	parent := "projects/" + gcpProject + "/locations/" + gcpRegion + "/namespaces/" + namespace
-
-	serviceReq := &servicedirectorypb.CreateServiceRequest{
-		Parent:    parent,
-		ServiceId: serviceName,
-		Service: &servicedirectorypb.Service{
-			Annotations: map[string]string{
-				"key1": "value1",
-				"key2": "value2",
-			},
-		},
-	}
-
-	srv, err := client.CreateService(ctx, serviceReq)
-
-	if err != nil {
-		log.Error("Failed to create service: " + err.Error())
-		// Proceed even if service creation fails, it might already exist
-	}
-
-	_, err = client.CreateEndpoint(
-		ctx,
-		&servicedirectorypb.CreateEndpointRequest{
-			Parent:     srv.Name,
-			EndpointId: serviceName + "-endpoint",
-			Endpoint: &servicedirectorypb.Endpoint{
-				Address: grpcAddr,
-				Port:    int32(parsePort(grpcAddr)),
-				Annotations: map[string]string{
-					"key1": "value1",
-					"key2": "value2",
-				},
-			},
-		},
-	)
-	if err != nil {
-		log.Error("Failed to create endpoint: " + err.Error())
-		// Proceed even if service creation fails, it might already exist
-	}
-
-	log.Info("Service registered with Service Directory: " + serviceName)
-}
-
-func GetInstance(serviceName, gcpProject, gcpRegion, namespace string) (*servicedirectorypb.Endpoint, error) {
-	ctx := context.Background()
-
-	lookupClient, err := servicedirectory.NewLookupClient(ctx)
-	if err != nil {
-		log.Error("Failed to create service directory lookup client: " + err.Error())
-		return nil, err
-	}
-	defer lookupClient.Close()
-
-	req := &servicedirectorypb.ResolveServiceRequest{
-		Name: "projects/" + gcpProject + "/locations/" + gcpRegion + "/namespaces/" + namespace + "/services/" + serviceName,
-	}
-
-	resp, err := lookupClient.ResolveService(ctx, req)
-	if err != nil {
-		log.Error("Failed to resolve service: " + err.Error())
-		return nil, err
-	}
-
-	if len(resp.GetService().GetEndpoints()) == 0 {
-		return nil, os.ErrNotExist
-	}
-
-	return resp.GetService().GetEndpoints()[0], nil
-}
-
 func GetInstanceWithConsul(serviceName, consulHost, consulPort string) *consulapi.ServiceEntry {
 	consulConfig := consulapi.DefaultConfig()
-	consulConfig.Address = consulHost + ":" + consulPort
+	consulConfig.Address = resolveConsulAddress(consulPort, consulHost)
 	client, err := consulapi.NewClient(consulConfig)
 	if err != nil {
 		log.Error("Failed to create Consul client: " + err.Error())
@@ -153,5 +71,16 @@ func GetInstanceWithConsul(serviceName, consulHost, consulPort string) *consulap
 		os.Exit(1)
 	}
 
-	return instances[0]
+	n := rand.Intn(len(instances))
+	return instances[n]
+}
+
+func resolveConsulAddress(consulPort, consulHost string) string {
+	consulAddress := ""
+	if consulPort == "" {
+		consulAddress = consulHost
+	} else {
+		consulAddress = consulHost + ":" + consulPort
+	}
+	return consulAddress
 }
