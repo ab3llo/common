@@ -22,7 +22,7 @@ func parsePort(portStr string) int {
 	return port
 }
 
-func RegisterServiceWithConsul(serviceName, addr, consulHost, consulPort string) {
+func RegisterServiceWithConsul(serviceName, servicePort, consulHost, consulPort string) {
 	consulConfig := consulapi.DefaultConfig()
 	consulConfig.Address = resolveConsulAddress(consulPort, consulHost)
 	client, err := consulapi.NewClient(consulConfig)
@@ -32,7 +32,7 @@ func RegisterServiceWithConsul(serviceName, addr, consulHost, consulPort string)
 	}
 
 	// Extract port from grpcAddr (e.g., ":5001" -> "5001")
-	port := addr
+	port := servicePort
 	if port[0] == ':' {
 		port = port[1:]
 	}
