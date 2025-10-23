@@ -15,6 +15,11 @@ type Config struct {
 	ClerkAPIKey string `mapstructure:"CLERK_API_KEY"`
 	ConsulHost  string `mapstructure:"CONSUL_HOST"`
 	ConsulPort  string `mapstructure:"CONSUL_PORT"`
+
+	HouseholdHost string `mapstructure:"HOUSEHOLD_SERVICE_HOST"`
+	MemberHost    string `mapstructure:"MEMBER_SERVICE_HOST"`
+	MealHost      string `mapstructure:"MEAL_SERVICE_HOST"`
+	EventHost     string `mapstructure:"EVENT_SERVICE_HOST"`
 }
 
 func LoadConfig(path string) (Config, error) {
@@ -25,6 +30,7 @@ func LoadConfig(path string) (Config, error) {
 	viper.SetDefault("DSN", "postgresql://postgres:postgres@127.0.0.1:54322/postgres")
 	viper.SetDefault("PORT", "8080")
 	viper.SetDefault("SERVICE_NAME", "gateway")
+	viper.SetDefault("HO", "http://localhost:8080")
 	viper.SetDefault("ENV", "dev")
 	viper.SetDefault("GCP_PROJECT", "")
 	viper.SetDefault("GCP_REGION", "")
