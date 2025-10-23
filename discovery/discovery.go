@@ -51,6 +51,22 @@ func RegisterServiceWithConsul(serviceName, servicePort, consulHost, consulPort 
 	log.Info("Service registered with Consul: " + registration.Name)
 }
 
+func DeregisterServiceWithConsul(serviceName, consulHost, consulPort string) {
+	consulConfig := consulapi.DefaultConfig()
+	consulConfig.Address = resolveConsulAddress(consulPort, consulHost)
+	client, err := consulapi.NewClient(consulConfig)
+	if err != nil {
+		log.Error("Failed to create Consul client: " + err.Error())
+		os.Exit(1)
+	}
+
+	if err := client.Agent().ServiceDeregister(serviceName); err != nil {
+		log.Error("Failed to deregister service from Consul: " + err.Error())
+		os.Exit(1)
+	}
+	log.Info("Service deregistered from Consul: " + serviceName)
+}
+
 func GetInstanceWithConsul(serviceName, consulHost, consulPort string) *consulapi.ServiceEntry {
 	consulConfig := consulapi.DefaultConfig()
 	consulConfig.Address = resolveConsulAddress(consulPort, consulHost)
