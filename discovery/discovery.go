@@ -40,7 +40,7 @@ func RegisterServiceWithConsul(serviceName, addr, consulHost, consulPort string)
 	registration := &consulapi.AgentServiceRegistration{
 		ID:      serviceName,
 		Name:    serviceName,
-		Address: serviceName, // Use service name as address for Docker networking
+		Address: serviceName + ":" + port, // Use service name as address for Docker networking
 		Port:    parsePort(port),
 	}
 
