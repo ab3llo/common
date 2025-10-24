@@ -2,38 +2,128 @@ syntax = "proto3";
 
 option go_package = "github.com/hmlylab/common/proto";
 
+import "google/api/annotations.proto";
+
 package api;
 
 service HouseholdService {
-    rpc CreateHousehold(CreateHouseholdRequest) returns (HouseholdResponse);
-    rpc GetHousehold(GetHouseholdRequest) returns (HouseholdResponse);
-    rpc GetHouseholds(GetHouseHoldsRequest) returns (HouseholdsResponse);
-    rpc UpdateHousehold(UpdateHouseholdRequest) returns (HouseholdResponse);
-    rpc DeleteHousehold(GetHouseholdRequest) returns (HouseholdResponse);
+    rpc CreateHousehold(CreateHouseholdRequest) returns (HouseholdResponse) {
+        option (google.api.http) = {
+            post: "/v1/households"
+            body: "*"
+        };
+    };
+    rpc GetHousehold(GetHouseholdRequest) returns (HouseholdResponse) {
+        option (google.api.http) = {
+            get: "/v1/households/{id}"
+        };
+    };
+    rpc GetHouseholds(GetHouseHoldsRequest) returns (HouseholdsResponse){
+        option (google.api.http) = {
+            get: "/v1/households/{offset}/{limit}"
+        };
+    };
+    rpc UpdateHousehold(UpdateHouseholdRequest) returns (HouseholdResponse){
+        option (google.api.http) = {
+            put: "/v1/households/{id}"
+            body: "*"
+        };
+    };
+    rpc DeleteHousehold(GetHouseholdRequest) returns (HouseholdResponse){
+        option (google.api.http) = {
+            delete: "/v1/households/{id}"
+        };
+    };
 }
 
 service MemberService {
-    rpc CreateMember(CreateMemberRequest) returns (MemberResponse);
-    rpc GetMember(GetMemberRequest) returns (MemberResponse);
-    rpc GetMembers(GetMembersRequest) returns (MembersResponse);
-    rpc UpdateMember(UpdateMemberRequest) returns (MemberResponse);
-    rpc DeleteMember(GetMemberRequest) returns (MemberResponse);
+    rpc CreateMember(CreateMemberRequest) returns (MemberResponse){
+        option (google.api.http) = {
+            post: "/v1/members"
+            body: "*"
+        };
+    };
+    rpc GetMember(GetMemberRequest) returns (MemberResponse){
+        option (google.api.http) = {
+            get: "/v1/members/{id}"
+        };
+    };
+    rpc GetMembers(GetMembersRequest) returns (MembersResponse){
+        option (google.api.http) = {
+            get: "/v1/members/household/{household_id}"
+        };
+    };
+    rpc UpdateMember(UpdateMemberRequest) returns (MemberResponse){
+        option (google.api.http) = {
+            put: "/v1/members/{id}"
+            body: "*"
+        };
+    };
+    rpc DeleteMember(GetMemberRequest) returns (MemberResponse){
+        option (google.api.http) = {
+            delete: "/v1/members/{id}"
+        };
+    };
 }
 
 service MealService {
-    rpc CreateMeal(CreateMealRequest) returns (MealResponse);
-    rpc GetMeal(GetMealRequest) returns (MealResponse);
-    rpc GetMeals(GetMealsRequest) returns (MealsResponse);
-    rpc UpdateMeal(UpdateMealRequest) returns (MealResponse);
-    rpc DeleteMeal(GetMealRequest) returns (MealResponse);
+    rpc CreateMeal(CreateMealRequest) returns (MealResponse){
+        option (google.api.http) = {
+            post: "/v1/meals"
+            body: "*"
+        };
+    };
+    rpc GetMeal(GetMealRequest) returns (MealResponse){
+        option (google.api.http) = {
+            get: "/v1/meals/{id}"
+        };
+    };
+    rpc GetMeals(GetMealsRequest) returns (MealsResponse){
+        option (google.api.http) = {
+            get: "/v1/meals/household/{household_id}"
+        };
+    };
+    rpc UpdateMeal(UpdateMealRequest) returns (MealResponse){
+        option (google.api.http) = {
+            put: "/v1/meals/{id}"
+            body: "*"
+        };
+    };
+    rpc DeleteMeal(GetMealRequest) returns (MealResponse){
+        option (google.api.http) = {
+            delete: "/v1/meals/{id}"
+        };
+    };
 }
 
 service EventService {
-    rpc CreateEvent(CreateEventRequest) returns (EventResponse);
-    rpc GetEvent(GetEventRequest) returns (EventResponse);
-    rpc GetEvents(GetEventsRequest) returns (EventsResponse);
-    rpc UpdateEvent(UpdateEventRequest) returns (EventResponse);
-    rpc DeleteEvent(GetEventRequest) returns (EventResponse);
+    rpc CreateEvent(CreateEventRequest) returns (EventResponse){
+        option (google.api.http) = {
+            post: "/v1/events"
+            body: "*"
+        };
+    };
+    rpc GetEvent(GetEventRequest) returns (EventResponse){
+        option (google.api.http) = {
+            get: "/v1/events/{id}"
+        };
+    };
+    rpc GetEvents(GetEventsRequest) returns (EventsResponse){
+        option (google.api.http) = {
+            get: "/v1/events/entity/{entityType}/{offset}/{limit}"
+        };
+    };
+    rpc UpdateEvent(UpdateEventRequest) returns (EventResponse){
+        option (google.api.http) = {
+            put: "/v1/events/{id}"
+            body: "*"
+        };
+    };
+    rpc DeleteEvent(GetEventRequest) returns (EventResponse){
+        option (google.api.http) = {
+            delete: "/v1/events/{id}"
+        };
+    };
 }   
 
 message CreateHouseholdRequest {
