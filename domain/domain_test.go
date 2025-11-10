@@ -10,6 +10,7 @@ import (
 )
 
 func TestBaseModel_IsValid(t *testing.T) {
+	now := time.Now()
 	tests := []struct {
 		name     string
 		model    BaseModel
@@ -17,7 +18,7 @@ func TestBaseModel_IsValid(t *testing.T) {
 	}{
 		{
 			name:     "valid model with ID",
-			model:    BaseModel{ID: "test-id"},
+			model:    BaseModel{ID: "test-id", CreatedAt: now, UpdatedAt: now},
 			expected: true,
 		},
 		{
@@ -27,7 +28,7 @@ func TestBaseModel_IsValid(t *testing.T) {
 		},
 		{
 			name:     "valid model with UUID",
-			model:    BaseModel{ID: uuid.New().String()},
+			model:    BaseModel{ID: uuid.New().String(), CreatedAt: now, UpdatedAt: now},
 			expected: true,
 		},
 	}
@@ -70,8 +71,9 @@ func TestBaseModel_BeforeCreate(t *testing.T) {
 }
 
 func TestHousehold(t *testing.T) {
+	now := time.Now()
 	household := Household{
-		BaseModel: BaseModel{ID: "test-id"},
+		BaseModel: BaseModel{ID: "test-id", CreatedAt: now, UpdatedAt: now},
 		Name:      "Test Household",
 	}
 
@@ -85,8 +87,9 @@ func TestHousehold(t *testing.T) {
 }
 
 func TestMember(t *testing.T) {
+	now := time.Now()
 	member := Member{
-		BaseModel:   BaseModel{ID: "test-id"},
+		BaseModel:   BaseModel{ID: "test-id", CreatedAt: now, UpdatedAt: now},
 		UserID:      "user-123",
 		HouseholdID: "household-456",
 	}
@@ -105,8 +108,9 @@ func TestMember(t *testing.T) {
 }
 
 func TestMeal(t *testing.T) {
+	now := time.Now()
 	meal := Meal{
-		BaseModel:   BaseModel{ID: "test-id"},
+		BaseModel:   BaseModel{ID: "test-id", CreatedAt: now, UpdatedAt: now},
 		Name:        "Breakfast",
 		HouseholdID: "household-123",
 	}
@@ -121,11 +125,12 @@ func TestMeal(t *testing.T) {
 }
 
 func TestEvent(t *testing.T) {
-	startTime := time.Now()
+	now := time.Now()
+	startTime := now
 	endTime := startTime.Add(2 * time.Hour)
 
 	event := Event{
-		BaseModel:  BaseModel{ID: "test-id"},
+		BaseModel:  BaseModel{ID: "test-id", CreatedAt: now, UpdatedAt: now},
 		Name:       "Test Event",
 		EntityID:   "entity-123",
 		EntityType: "household",
@@ -152,8 +157,9 @@ func TestEvent(t *testing.T) {
 }
 
 func TestUser(t *testing.T) {
+	now := time.Now()
 	user := User{
-		BaseModel: BaseModel{ID: "test-id"},
+		BaseModel: BaseModel{ID: "test-id", CreatedAt: now, UpdatedAt: now},
 		Name:      "John Doe",
 		Email:     "john@example.com",
 		Password:  "password123",
@@ -216,8 +222,9 @@ func TestEvent_DateValidation(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			now := time.Now()
 			event := Event{
-				BaseModel:  BaseModel{ID: "test-id"},
+				BaseModel:  BaseModel{ID: "test-id", CreatedAt: now, UpdatedAt: now},
 				Name:       "Test Event",
 				EntityID:   "entity-123",
 				EntityType: "household",
@@ -290,6 +297,7 @@ func TestRelationships_HouseholdMembers(t *testing.T) {
 }
 
 func TestBaseModel_ValidationEdgeCases(t *testing.T) {
+	now := time.Now()
 	tests := []struct {
 		name  string
 		model BaseModel
@@ -302,17 +310,17 @@ func TestBaseModel_ValidationEdgeCases(t *testing.T) {
 		},
 		{
 			name:  "whitespace only ID",
-			model: BaseModel{ID: "   "},
+			model: BaseModel{ID: "   ", CreatedAt: now, UpdatedAt: now},
 			valid: true, // Current implementation only checks empty string
 		},
 		{
 			name:  "very long ID",
-			model: BaseModel{ID: string(make([]byte, 1000))},
+			model: BaseModel{ID: string(make([]byte, 1000)), CreatedAt: now, UpdatedAt: now},
 			valid: true,
 		},
 		{
 			name:  "special characters in ID",
-			model: BaseModel{ID: "id-with-special!@#$%^&*()"},
+			model: BaseModel{ID: "id-with-special!@#$%^&*()", CreatedAt: now, UpdatedAt: now},
 			valid: true,
 		},
 	}
@@ -399,7 +407,8 @@ func TestMeal_HouseholdRelationship(t *testing.T) {
 }
 
 func BenchmarkBaseModel_IsValid(b *testing.B) {
-	model := BaseModel{ID: "test-id-for-benchmark"}
+	now := time.Now()
+	model := BaseModel{ID: "test-id-for-benchmark", CreatedAt: now, UpdatedAt: now}
 	for i := 0; i < b.N; i++ {
 		model.IsValid()
 	}
