@@ -29,8 +29,8 @@ func (m *BaseModel) IsValid() bool {
 
 func (m *BaseModel) BeforeCreate(tx *gorm.DB) (err error) {
 	m.ID = uuid.New().String()
-	m.CreatedAt = time.Now().UTC().Local()
-	m.UpdatedAt = time.Now().UTC().Local()
+	m.CreatedAt = time.Now().UTC()
+	m.UpdatedAt = time.Now().UTC()
 	if !m.IsValid() {
 		return errors.New("rollback: invalid model")
 	}
