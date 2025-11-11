@@ -20,7 +20,7 @@ service HouseholdService {
     };
     rpc GetHouseholds(GetHouseHoldsRequest) returns (HouseholdsResponse){
         option (google.api.http) = {
-            get: "/v1/households/{offset}/{limit}"
+            get: "/v1/households/offset/{offset}/limit/{limit}"
         };
     };
     rpc UpdateHousehold(UpdateHouseholdRequest) returns (HouseholdResponse){
@@ -110,7 +110,13 @@ service EventService {
     };
     rpc GetEvents(GetEventsRequest) returns (EventsResponse){
         option (google.api.http) = {
-            get: "/v1/events/entity/{entityType}/{offset}/{limit}"
+            get: "/v1/events/offset/{offset}/limit/{limit}"
+        };
+    };
+
+    rpc GetEventsByEntityType(GetEventsRequest) returns (EventsResponse){
+        option (google.api.http) = {
+            get: "/v1/events/entity/{entityType}/offset/{offset}/limit/{limit}"
         };
     };
     rpc UpdateEvent(UpdateEventRequest) returns (EventResponse){
