@@ -1256,9 +1256,9 @@ func (x *GetEventRequest) GetId() string {
 
 type GetEventsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	EntityType    string                 `protobuf:"bytes,1,opt,name=entityType,proto3" json:"entityType,omitempty"`
-	Offset        int32                  `protobuf:"varint,2,opt,name=offset,proto3" json:"offset,omitempty"`
-	Limit         int32                  `protobuf:"varint,3,opt,name=limit,proto3" json:"limit,omitempty"`
+	EntityType    *string                `protobuf:"bytes,1,opt,name=entityType,proto3,oneof" json:"entityType,omitempty"`
+	Offset        *int32                 `protobuf:"varint,2,opt,name=offset,proto3,oneof" json:"offset,omitempty"`
+	Limit         *int32                 `protobuf:"varint,3,opt,name=limit,proto3,oneof" json:"limit,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1294,22 +1294,22 @@ func (*GetEventsRequest) Descriptor() ([]byte, []int) {
 }
 
 func (x *GetEventsRequest) GetEntityType() string {
-	if x != nil {
-		return x.EntityType
+	if x != nil && x.EntityType != nil {
+		return *x.EntityType
 	}
 	return ""
 }
 
 func (x *GetEventsRequest) GetOffset() int32 {
-	if x != nil {
-		return x.Offset
+	if x != nil && x.Offset != nil {
+		return *x.Offset
 	}
 	return 0
 }
 
 func (x *GetEventsRequest) GetLimit() int32 {
-	if x != nil {
-		return x.Limit
+	if x != nil && x.Limit != nil {
+		return *x.Limit
 	}
 	return 0
 }
@@ -1785,13 +1785,16 @@ const file_hmly_proto_rawDesc = "" +
 	"\vassigned_to\x18\x06 \x01(\tR\n" +
 	"assignedTo\"!\n" +
 	"\x0fGetEventRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"`\n" +
-	"\x10GetEventsRequest\x12\x1e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"\x93\x01\n" +
+	"\x10GetEventsRequest\x12#\n" +
 	"\n" +
-	"entityType\x18\x01 \x01(\tR\n" +
-	"entityType\x12\x16\n" +
-	"\x06offset\x18\x02 \x01(\x05R\x06offset\x12\x14\n" +
-	"\x05limit\x18\x03 \x01(\x05R\x05limit\"\xd1\x01\n" +
+	"entityType\x18\x01 \x01(\tH\x00R\n" +
+	"entityType\x88\x01\x01\x12\x1b\n" +
+	"\x06offset\x18\x02 \x01(\x05H\x01R\x06offset\x88\x01\x01\x12\x19\n" +
+	"\x05limit\x18\x03 \x01(\x05H\x02R\x05limit\x88\x01\x01B\r\n" +
+	"\v_entityTypeB\t\n" +
+	"\a_offsetB\b\n" +
+	"\x06_limit\"\xd1\x01\n" +
 	"\x12UpdateEventRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1b\n" +
@@ -1834,11 +1837,11 @@ const file_hmly_proto_rawDesc = "" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x124\n" +
 	"\rerror_message\x18\x03 \x01(\v2\n" +
 	".api.ErrorH\x00R\ferrorMessage\x88\x01\x01B\x10\n" +
-	"\x0e_error_message2\x99\x04\n" +
+	"\x0e_error_message2\xfb\x03\n" +
 	"\x10HouseholdService\x12a\n" +
 	"\x0fCreateHousehold\x12\x1b.api.CreateHouseholdRequest\x1a\x16.api.HouseholdResponse\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/v1/households\x12]\n" +
-	"\fGetHousehold\x12\x18.api.GetHouseholdRequest\x1a\x16.api.HouseholdResponse\"\x1b\x82\xd3\xe4\x93\x02\x15\x12\x13/v1/households/{id}\x12y\n" +
-	"\rGetHouseholds\x12\x19.api.GetHouseHoldsRequest\x1a\x17.api.HouseholdsResponse\"4\x82\xd3\xe4\x93\x02.\x12,/v1/households/offset/{offset}/limit/{limit}\x12f\n" +
+	"\fGetHousehold\x12\x18.api.GetHouseholdRequest\x1a\x16.api.HouseholdResponse\"\x1b\x82\xd3\xe4\x93\x02\x15\x12\x13/v1/households/{id}\x12[\n" +
+	"\rGetHouseholds\x12\x19.api.GetHouseHoldsRequest\x1a\x17.api.HouseholdsResponse\"\x16\x82\xd3\xe4\x93\x02\x10\x12\x0e/v1/households\x12f\n" +
 	"\x0fUpdateHousehold\x12\x1b.api.UpdateHouseholdRequest\x1a\x16.api.HouseholdResponse\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\x1a\x13/v1/households/{id}\x12`\n" +
 	"\x0fDeleteHousehold\x12\x18.api.GetHouseholdRequest\x1a\x16.api.HouseholdResponse\"\x1b\x82\xd3\xe4\x93\x02\x15*\x13/v1/households/{id}2\xd5\x03\n" +
 	"\rMemberService\x12U\n" +
@@ -1856,13 +1859,13 @@ const file_hmly_proto_rawDesc = "" +
 	"\n" +
 	"UpdateMeal\x12\x16.api.UpdateMealRequest\x1a\x11.api.MealResponse\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\x1a\x0e/v1/meals/{id}\x12L\n" +
 	"\n" +
-	"DeleteMeal\x12\x13.api.GetMealRequest\x1a\x11.api.MealResponse\"\x16\x82\xd3\xe4\x93\x02\x10*\x0e/v1/meals/{id}2\xd1\x04\n" +
+	"DeleteMeal\x12\x13.api.GetMealRequest\x1a\x11.api.MealResponse\"\x16\x82\xd3\xe4\x93\x02\x10*\x0e/v1/meals/{id}2\xa7\x03\n" +
 	"\fEventService\x12Q\n" +
 	"\vCreateEvent\x12\x17.api.CreateEventRequest\x1a\x12.api.EventResponse\"\x15\x82\xd3\xe4\x93\x02\x0f:\x01*\"\n" +
 	"/v1/events\x12M\n" +
-	"\bGetEvent\x12\x14.api.GetEventRequest\x1a\x12.api.EventResponse\"\x17\x82\xd3\xe4\x93\x02\x11\x12\x0f/v1/events/{id}\x12i\n" +
-	"\tGetEvents\x12\x15.api.GetEventsRequest\x1a\x13.api.EventsResponse\"0\x82\xd3\xe4\x93\x02*\x12(/v1/events/offset/{offset}/limit/{limit}\x12\x89\x01\n" +
-	"\x15GetEventsByEntityType\x12\x15.api.GetEventsRequest\x1a\x13.api.EventsResponse\"D\x82\xd3\xe4\x93\x02>\x12</v1/events/entity/{entityType}/offset/{offset}/limit/{limit}\x12V\n" +
+	"\bGetEvent\x12\x14.api.GetEventRequest\x1a\x12.api.EventResponse\"\x17\x82\xd3\xe4\x93\x02\x11\x12\x0f/v1/events/{id}\x12K\n" +
+	"\tGetEvents\x12\x15.api.GetEventsRequest\x1a\x13.api.EventsResponse\"\x12\x82\xd3\xe4\x93\x02\f\x12\n" +
+	"/v1/events\x12V\n" +
 	"\vUpdateEvent\x12\x17.api.UpdateEventRequest\x1a\x12.api.EventResponse\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\x1a\x0f/v1/events/{id}\x12P\n" +
 	"\vDeleteEvent\x12\x14.api.GetEventRequest\x1a\x12.api.EventResponse\"\x17\x82\xd3\xe4\x93\x02\x11*\x0f/v1/events/{id}B!Z\x1fgithub.com/hmlylab/common/protob\x06proto3"
 
@@ -1942,32 +1945,30 @@ var file_hmly_proto_depIdxs = []int32{
 	20, // 29: api.EventService.CreateEvent:input_type -> api.CreateEventRequest
 	21, // 30: api.EventService.GetEvent:input_type -> api.GetEventRequest
 	22, // 31: api.EventService.GetEvents:input_type -> api.GetEventsRequest
-	22, // 32: api.EventService.GetEventsByEntityType:input_type -> api.GetEventsRequest
-	23, // 33: api.EventService.UpdateEvent:input_type -> api.UpdateEventRequest
-	21, // 34: api.EventService.DeleteEvent:input_type -> api.GetEventRequest
-	5,  // 35: api.HouseholdService.CreateHousehold:output_type -> api.HouseholdResponse
-	5,  // 36: api.HouseholdService.GetHousehold:output_type -> api.HouseholdResponse
-	7,  // 37: api.HouseholdService.GetHouseholds:output_type -> api.HouseholdsResponse
-	5,  // 38: api.HouseholdService.UpdateHousehold:output_type -> api.HouseholdResponse
-	5,  // 39: api.HouseholdService.DeleteHousehold:output_type -> api.HouseholdResponse
-	12, // 40: api.MemberService.CreateMember:output_type -> api.MemberResponse
-	12, // 41: api.MemberService.GetMember:output_type -> api.MemberResponse
-	13, // 42: api.MemberService.GetMembers:output_type -> api.MembersResponse
-	12, // 43: api.MemberService.UpdateMember:output_type -> api.MemberResponse
-	12, // 44: api.MemberService.DeleteMember:output_type -> api.MemberResponse
-	18, // 45: api.MealService.CreateMeal:output_type -> api.MealResponse
-	18, // 46: api.MealService.GetMeal:output_type -> api.MealResponse
-	19, // 47: api.MealService.GetMeals:output_type -> api.MealsResponse
-	18, // 48: api.MealService.UpdateMeal:output_type -> api.MealResponse
-	18, // 49: api.MealService.DeleteMeal:output_type -> api.MealResponse
-	24, // 50: api.EventService.CreateEvent:output_type -> api.EventResponse
-	24, // 51: api.EventService.GetEvent:output_type -> api.EventResponse
-	25, // 52: api.EventService.GetEvents:output_type -> api.EventsResponse
-	25, // 53: api.EventService.GetEventsByEntityType:output_type -> api.EventsResponse
-	24, // 54: api.EventService.UpdateEvent:output_type -> api.EventResponse
-	24, // 55: api.EventService.DeleteEvent:output_type -> api.EventResponse
-	35, // [35:56] is the sub-list for method output_type
-	14, // [14:35] is the sub-list for method input_type
+	23, // 32: api.EventService.UpdateEvent:input_type -> api.UpdateEventRequest
+	21, // 33: api.EventService.DeleteEvent:input_type -> api.GetEventRequest
+	5,  // 34: api.HouseholdService.CreateHousehold:output_type -> api.HouseholdResponse
+	5,  // 35: api.HouseholdService.GetHousehold:output_type -> api.HouseholdResponse
+	7,  // 36: api.HouseholdService.GetHouseholds:output_type -> api.HouseholdsResponse
+	5,  // 37: api.HouseholdService.UpdateHousehold:output_type -> api.HouseholdResponse
+	5,  // 38: api.HouseholdService.DeleteHousehold:output_type -> api.HouseholdResponse
+	12, // 39: api.MemberService.CreateMember:output_type -> api.MemberResponse
+	12, // 40: api.MemberService.GetMember:output_type -> api.MemberResponse
+	13, // 41: api.MemberService.GetMembers:output_type -> api.MembersResponse
+	12, // 42: api.MemberService.UpdateMember:output_type -> api.MemberResponse
+	12, // 43: api.MemberService.DeleteMember:output_type -> api.MemberResponse
+	18, // 44: api.MealService.CreateMeal:output_type -> api.MealResponse
+	18, // 45: api.MealService.GetMeal:output_type -> api.MealResponse
+	19, // 46: api.MealService.GetMeals:output_type -> api.MealsResponse
+	18, // 47: api.MealService.UpdateMeal:output_type -> api.MealResponse
+	18, // 48: api.MealService.DeleteMeal:output_type -> api.MealResponse
+	24, // 49: api.EventService.CreateEvent:output_type -> api.EventResponse
+	24, // 50: api.EventService.GetEvent:output_type -> api.EventResponse
+	25, // 51: api.EventService.GetEvents:output_type -> api.EventsResponse
+	24, // 52: api.EventService.UpdateEvent:output_type -> api.EventResponse
+	24, // 53: api.EventService.DeleteEvent:output_type -> api.EventResponse
+	34, // [34:54] is the sub-list for method output_type
+	14, // [14:34] is the sub-list for method input_type
 	14, // [14:14] is the sub-list for extension type_name
 	14, // [14:14] is the sub-list for extension extendee
 	0,  // [0:14] is the sub-list for field type_name
@@ -1985,6 +1986,7 @@ func file_hmly_proto_init() {
 	file_hmly_proto_msgTypes[13].OneofWrappers = []any{}
 	file_hmly_proto_msgTypes[18].OneofWrappers = []any{}
 	file_hmly_proto_msgTypes[19].OneofWrappers = []any{}
+	file_hmly_proto_msgTypes[22].OneofWrappers = []any{}
 	file_hmly_proto_msgTypes[24].OneofWrappers = []any{}
 	file_hmly_proto_msgTypes[25].OneofWrappers = []any{}
 	file_hmly_proto_msgTypes[27].OneofWrappers = []any{}
