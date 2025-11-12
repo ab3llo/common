@@ -3,6 +3,7 @@ syntax = "proto3";
 option go_package = "github.com/hmlylab/common/proto";
 
 import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
 
 package api;
 
@@ -29,7 +30,7 @@ service HouseholdService {
             body: "*"
         };
     };
-    rpc DeleteHousehold(GetHouseholdRequest) returns (HouseholdResponse){
+    rpc DeleteHousehold(GetHouseholdRequest) returns (google.protobuf.Empty){
         option (google.api.http) = {
             delete: "/v1/households/{id}"
         };
@@ -59,7 +60,7 @@ service MemberService {
             body: "*"
         };
     };
-    rpc DeleteMember(GetMemberRequest) returns (MemberResponse){
+    rpc DeleteMember(GetMemberRequest) returns (google.protobuf.Empty){
         option (google.api.http) = {
             delete: "/v1/members/{id}"
         };
@@ -89,7 +90,7 @@ service MealService {
             body: "*"
         };
     };
-    rpc DeleteMeal(GetMealRequest) returns (MealResponse){
+    rpc DeleteMeal(GetMealRequest) returns (google.protobuf.Empty){
         option (google.api.http) = {
             delete: "/v1/meals/{id}"
         };
@@ -119,7 +120,7 @@ service EventService {
             body: "*"
         };
     };
-    rpc DeleteEvent(GetEventRequest) returns (EventResponse){
+    rpc DeleteEvent(GetEventRequest) returns (google.protobuf.Empty){
         option (google.api.http) = {
             delete: "/v1/events/{id}"
         };

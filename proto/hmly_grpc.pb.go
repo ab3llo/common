@@ -11,6 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -34,7 +35,7 @@ type HouseholdServiceClient interface {
 	GetHousehold(ctx context.Context, in *GetHouseholdRequest, opts ...grpc.CallOption) (*HouseholdResponse, error)
 	GetHouseholds(ctx context.Context, in *GetHouseHoldsRequest, opts ...grpc.CallOption) (*HouseholdsResponse, error)
 	UpdateHousehold(ctx context.Context, in *UpdateHouseholdRequest, opts ...grpc.CallOption) (*HouseholdResponse, error)
-	DeleteHousehold(ctx context.Context, in *GetHouseholdRequest, opts ...grpc.CallOption) (*HouseholdResponse, error)
+	DeleteHousehold(ctx context.Context, in *GetHouseholdRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type householdServiceClient struct {
@@ -85,9 +86,9 @@ func (c *householdServiceClient) UpdateHousehold(ctx context.Context, in *Update
 	return out, nil
 }
 
-func (c *householdServiceClient) DeleteHousehold(ctx context.Context, in *GetHouseholdRequest, opts ...grpc.CallOption) (*HouseholdResponse, error) {
+func (c *householdServiceClient) DeleteHousehold(ctx context.Context, in *GetHouseholdRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(HouseholdResponse)
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, HouseholdService_DeleteHousehold_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -103,7 +104,7 @@ type HouseholdServiceServer interface {
 	GetHousehold(context.Context, *GetHouseholdRequest) (*HouseholdResponse, error)
 	GetHouseholds(context.Context, *GetHouseHoldsRequest) (*HouseholdsResponse, error)
 	UpdateHousehold(context.Context, *UpdateHouseholdRequest) (*HouseholdResponse, error)
-	DeleteHousehold(context.Context, *GetHouseholdRequest) (*HouseholdResponse, error)
+	DeleteHousehold(context.Context, *GetHouseholdRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedHouseholdServiceServer()
 }
 
@@ -126,7 +127,7 @@ func (UnimplementedHouseholdServiceServer) GetHouseholds(context.Context, *GetHo
 func (UnimplementedHouseholdServiceServer) UpdateHousehold(context.Context, *UpdateHouseholdRequest) (*HouseholdResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateHousehold not implemented")
 }
-func (UnimplementedHouseholdServiceServer) DeleteHousehold(context.Context, *GetHouseholdRequest) (*HouseholdResponse, error) {
+func (UnimplementedHouseholdServiceServer) DeleteHousehold(context.Context, *GetHouseholdRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteHousehold not implemented")
 }
 func (UnimplementedHouseholdServiceServer) mustEmbedUnimplementedHouseholdServiceServer() {}
@@ -288,7 +289,7 @@ type MemberServiceClient interface {
 	GetMember(ctx context.Context, in *GetMemberRequest, opts ...grpc.CallOption) (*MemberResponse, error)
 	GetMembers(ctx context.Context, in *GetMembersRequest, opts ...grpc.CallOption) (*MembersResponse, error)
 	UpdateMember(ctx context.Context, in *UpdateMemberRequest, opts ...grpc.CallOption) (*MemberResponse, error)
-	DeleteMember(ctx context.Context, in *GetMemberRequest, opts ...grpc.CallOption) (*MemberResponse, error)
+	DeleteMember(ctx context.Context, in *GetMemberRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type memberServiceClient struct {
@@ -339,9 +340,9 @@ func (c *memberServiceClient) UpdateMember(ctx context.Context, in *UpdateMember
 	return out, nil
 }
 
-func (c *memberServiceClient) DeleteMember(ctx context.Context, in *GetMemberRequest, opts ...grpc.CallOption) (*MemberResponse, error) {
+func (c *memberServiceClient) DeleteMember(ctx context.Context, in *GetMemberRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(MemberResponse)
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, MemberService_DeleteMember_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -357,7 +358,7 @@ type MemberServiceServer interface {
 	GetMember(context.Context, *GetMemberRequest) (*MemberResponse, error)
 	GetMembers(context.Context, *GetMembersRequest) (*MembersResponse, error)
 	UpdateMember(context.Context, *UpdateMemberRequest) (*MemberResponse, error)
-	DeleteMember(context.Context, *GetMemberRequest) (*MemberResponse, error)
+	DeleteMember(context.Context, *GetMemberRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedMemberServiceServer()
 }
 
@@ -380,7 +381,7 @@ func (UnimplementedMemberServiceServer) GetMembers(context.Context, *GetMembersR
 func (UnimplementedMemberServiceServer) UpdateMember(context.Context, *UpdateMemberRequest) (*MemberResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateMember not implemented")
 }
-func (UnimplementedMemberServiceServer) DeleteMember(context.Context, *GetMemberRequest) (*MemberResponse, error) {
+func (UnimplementedMemberServiceServer) DeleteMember(context.Context, *GetMemberRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteMember not implemented")
 }
 func (UnimplementedMemberServiceServer) mustEmbedUnimplementedMemberServiceServer() {}
@@ -542,7 +543,7 @@ type MealServiceClient interface {
 	GetMeal(ctx context.Context, in *GetMealRequest, opts ...grpc.CallOption) (*MealResponse, error)
 	GetMeals(ctx context.Context, in *GetMealsRequest, opts ...grpc.CallOption) (*MealsResponse, error)
 	UpdateMeal(ctx context.Context, in *UpdateMealRequest, opts ...grpc.CallOption) (*MealResponse, error)
-	DeleteMeal(ctx context.Context, in *GetMealRequest, opts ...grpc.CallOption) (*MealResponse, error)
+	DeleteMeal(ctx context.Context, in *GetMealRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type mealServiceClient struct {
@@ -593,9 +594,9 @@ func (c *mealServiceClient) UpdateMeal(ctx context.Context, in *UpdateMealReques
 	return out, nil
 }
 
-func (c *mealServiceClient) DeleteMeal(ctx context.Context, in *GetMealRequest, opts ...grpc.CallOption) (*MealResponse, error) {
+func (c *mealServiceClient) DeleteMeal(ctx context.Context, in *GetMealRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(MealResponse)
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, MealService_DeleteMeal_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -611,7 +612,7 @@ type MealServiceServer interface {
 	GetMeal(context.Context, *GetMealRequest) (*MealResponse, error)
 	GetMeals(context.Context, *GetMealsRequest) (*MealsResponse, error)
 	UpdateMeal(context.Context, *UpdateMealRequest) (*MealResponse, error)
-	DeleteMeal(context.Context, *GetMealRequest) (*MealResponse, error)
+	DeleteMeal(context.Context, *GetMealRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedMealServiceServer()
 }
 
@@ -634,7 +635,7 @@ func (UnimplementedMealServiceServer) GetMeals(context.Context, *GetMealsRequest
 func (UnimplementedMealServiceServer) UpdateMeal(context.Context, *UpdateMealRequest) (*MealResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateMeal not implemented")
 }
-func (UnimplementedMealServiceServer) DeleteMeal(context.Context, *GetMealRequest) (*MealResponse, error) {
+func (UnimplementedMealServiceServer) DeleteMeal(context.Context, *GetMealRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteMeal not implemented")
 }
 func (UnimplementedMealServiceServer) mustEmbedUnimplementedMealServiceServer() {}
@@ -796,7 +797,7 @@ type EventServiceClient interface {
 	GetEvent(ctx context.Context, in *GetEventRequest, opts ...grpc.CallOption) (*EventResponse, error)
 	GetEvents(ctx context.Context, in *GetEventsRequest, opts ...grpc.CallOption) (*EventsResponse, error)
 	UpdateEvent(ctx context.Context, in *UpdateEventRequest, opts ...grpc.CallOption) (*EventResponse, error)
-	DeleteEvent(ctx context.Context, in *GetEventRequest, opts ...grpc.CallOption) (*EventResponse, error)
+	DeleteEvent(ctx context.Context, in *GetEventRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type eventServiceClient struct {
@@ -847,9 +848,9 @@ func (c *eventServiceClient) UpdateEvent(ctx context.Context, in *UpdateEventReq
 	return out, nil
 }
 
-func (c *eventServiceClient) DeleteEvent(ctx context.Context, in *GetEventRequest, opts ...grpc.CallOption) (*EventResponse, error) {
+func (c *eventServiceClient) DeleteEvent(ctx context.Context, in *GetEventRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(EventResponse)
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, EventService_DeleteEvent_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -865,7 +866,7 @@ type EventServiceServer interface {
 	GetEvent(context.Context, *GetEventRequest) (*EventResponse, error)
 	GetEvents(context.Context, *GetEventsRequest) (*EventsResponse, error)
 	UpdateEvent(context.Context, *UpdateEventRequest) (*EventResponse, error)
-	DeleteEvent(context.Context, *GetEventRequest) (*EventResponse, error)
+	DeleteEvent(context.Context, *GetEventRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedEventServiceServer()
 }
 
@@ -888,7 +889,7 @@ func (UnimplementedEventServiceServer) GetEvents(context.Context, *GetEventsRequ
 func (UnimplementedEventServiceServer) UpdateEvent(context.Context, *UpdateEventRequest) (*EventResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateEvent not implemented")
 }
-func (UnimplementedEventServiceServer) DeleteEvent(context.Context, *GetEventRequest) (*EventResponse, error) {
+func (UnimplementedEventServiceServer) DeleteEvent(context.Context, *GetEventRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteEvent not implemented")
 }
 func (UnimplementedEventServiceServer) mustEmbedUnimplementedEventServiceServer() {}

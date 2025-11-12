@@ -10,6 +10,7 @@ import (
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -1683,7 +1684,7 @@ var File_hmly_proto protoreflect.FileDescriptor
 const file_hmly_proto_rawDesc = "" +
 	"\n" +
 	"\n" +
-	"hmly.proto\x12\x03api\x1a\x1cgoogle/api/annotations.proto\",\n" +
+	"hmly.proto\x12\x03api\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\",\n" +
 	"\x16CreateHouseholdRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\"%\n" +
 	"\x13GetHouseholdRequest\x12\x0e\n" +
@@ -1843,31 +1844,31 @@ const file_hmly_proto_rawDesc = "" +
 	"\fGetHousehold\x12\x18.api.GetHouseholdRequest\x1a\x16.api.HouseholdResponse\"\x1b\x82\xd3\xe4\x93\x02\x15\x12\x13/v1/households/{id}\x12[\n" +
 	"\rGetHouseholds\x12\x19.api.GetHouseHoldsRequest\x1a\x17.api.HouseholdsResponse\"\x16\x82\xd3\xe4\x93\x02\x10\x12\x0e/v1/households\x12f\n" +
 	"\x0fUpdateHousehold\x12\x1b.api.UpdateHouseholdRequest\x1a\x16.api.HouseholdResponse\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\x1a\x13/v1/households/{id}\x12`\n" +
-	"\x0fDeleteHousehold\x12\x18.api.GetHouseholdRequest\x1a\x16.api.HouseholdResponse\"\x1b\x82\xd3\xe4\x93\x02\x15*\x13/v1/households/{id}2\xd5\x03\n" +
+	"\x0fDeleteHousehold\x12\x18.api.GetHouseholdRequest\x1a\x16.google.protobuf.Empty\"\x1b\x82\xd3\xe4\x93\x02\x15*\x13/v1/households/{id}2\xd8\x03\n" +
 	"\rMemberService\x12U\n" +
 	"\fCreateMember\x12\x18.api.CreateMemberRequest\x1a\x13.api.MemberResponse\"\x16\x82\xd3\xe4\x93\x02\x10:\x01*\"\v/v1/members\x12Q\n" +
 	"\tGetMember\x12\x15.api.GetMemberRequest\x1a\x13.api.MemberResponse\"\x18\x82\xd3\xe4\x93\x02\x12\x12\x10/v1/members/{id}\x12h\n" +
 	"\n" +
 	"GetMembers\x12\x16.api.GetMembersRequest\x1a\x14.api.MembersResponse\",\x82\xd3\xe4\x93\x02&\x12$/v1/members/household/{household_id}\x12Z\n" +
-	"\fUpdateMember\x12\x18.api.UpdateMemberRequest\x1a\x13.api.MemberResponse\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\x1a\x10/v1/members/{id}\x12T\n" +
-	"\fDeleteMember\x12\x15.api.GetMemberRequest\x1a\x13.api.MemberResponse\"\x18\x82\xd3\xe4\x93\x02\x12*\x10/v1/members/{id}2\xab\x03\n" +
+	"\fUpdateMember\x12\x18.api.UpdateMemberRequest\x1a\x13.api.MemberResponse\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\x1a\x10/v1/members/{id}\x12W\n" +
+	"\fDeleteMember\x12\x15.api.GetMemberRequest\x1a\x16.google.protobuf.Empty\"\x18\x82\xd3\xe4\x93\x02\x12*\x10/v1/members/{id}2\xb0\x03\n" +
 	"\vMealService\x12M\n" +
 	"\n" +
 	"CreateMeal\x12\x16.api.CreateMealRequest\x1a\x11.api.MealResponse\"\x14\x82\xd3\xe4\x93\x02\x0e:\x01*\"\t/v1/meals\x12I\n" +
 	"\aGetMeal\x12\x13.api.GetMealRequest\x1a\x11.api.MealResponse\"\x16\x82\xd3\xe4\x93\x02\x10\x12\x0e/v1/meals/{id}\x12`\n" +
 	"\bGetMeals\x12\x14.api.GetMealsRequest\x1a\x12.api.MealsResponse\"*\x82\xd3\xe4\x93\x02$\x12\"/v1/meals/household/{household_id}\x12R\n" +
 	"\n" +
-	"UpdateMeal\x12\x16.api.UpdateMealRequest\x1a\x11.api.MealResponse\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\x1a\x0e/v1/meals/{id}\x12L\n" +
+	"UpdateMeal\x12\x16.api.UpdateMealRequest\x1a\x11.api.MealResponse\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\x1a\x0e/v1/meals/{id}\x12Q\n" +
 	"\n" +
-	"DeleteMeal\x12\x13.api.GetMealRequest\x1a\x11.api.MealResponse\"\x16\x82\xd3\xe4\x93\x02\x10*\x0e/v1/meals/{id}2\xa7\x03\n" +
+	"DeleteMeal\x12\x13.api.GetMealRequest\x1a\x16.google.protobuf.Empty\"\x16\x82\xd3\xe4\x93\x02\x10*\x0e/v1/meals/{id}2\xab\x03\n" +
 	"\fEventService\x12Q\n" +
 	"\vCreateEvent\x12\x17.api.CreateEventRequest\x1a\x12.api.EventResponse\"\x15\x82\xd3\xe4\x93\x02\x0f:\x01*\"\n" +
 	"/v1/events\x12M\n" +
 	"\bGetEvent\x12\x14.api.GetEventRequest\x1a\x12.api.EventResponse\"\x17\x82\xd3\xe4\x93\x02\x11\x12\x0f/v1/events/{id}\x12K\n" +
 	"\tGetEvents\x12\x15.api.GetEventsRequest\x1a\x13.api.EventsResponse\"\x12\x82\xd3\xe4\x93\x02\f\x12\n" +
 	"/v1/events\x12V\n" +
-	"\vUpdateEvent\x12\x17.api.UpdateEventRequest\x1a\x12.api.EventResponse\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\x1a\x0f/v1/events/{id}\x12P\n" +
-	"\vDeleteEvent\x12\x14.api.GetEventRequest\x1a\x12.api.EventResponse\"\x17\x82\xd3\xe4\x93\x02\x11*\x0f/v1/events/{id}B!Z\x1fgithub.com/hmlylab/common/protob\x06proto3"
+	"\vUpdateEvent\x12\x17.api.UpdateEventRequest\x1a\x12.api.EventResponse\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\x1a\x0f/v1/events/{id}\x12T\n" +
+	"\vDeleteEvent\x12\x14.api.GetEventRequest\x1a\x16.google.protobuf.Empty\"\x17\x82\xd3\xe4\x93\x02\x11*\x0f/v1/events/{id}B!Z\x1fgithub.com/hmlylab/common/protob\x06proto3"
 
 var (
 	file_hmly_proto_rawDescOnce sync.Once
@@ -1911,6 +1912,7 @@ var file_hmly_proto_goTypes = []any{
 	(*EventsResponse)(nil),          // 25: api.EventsResponse
 	(*VerifyTokenRequest)(nil),      // 26: api.VerifyTokenRequest
 	(*VerifyTokenResponse)(nil),     // 27: api.VerifyTokenResponse
+	(*emptypb.Empty)(nil),           // 28: google.protobuf.Empty
 }
 var file_hmly_proto_depIdxs = []int32{
 	6,  // 0: api.CreateHouseholdResponse.error_message:type_name -> api.Error
@@ -1951,22 +1953,22 @@ var file_hmly_proto_depIdxs = []int32{
 	5,  // 35: api.HouseholdService.GetHousehold:output_type -> api.HouseholdResponse
 	7,  // 36: api.HouseholdService.GetHouseholds:output_type -> api.HouseholdsResponse
 	5,  // 37: api.HouseholdService.UpdateHousehold:output_type -> api.HouseholdResponse
-	5,  // 38: api.HouseholdService.DeleteHousehold:output_type -> api.HouseholdResponse
+	28, // 38: api.HouseholdService.DeleteHousehold:output_type -> google.protobuf.Empty
 	12, // 39: api.MemberService.CreateMember:output_type -> api.MemberResponse
 	12, // 40: api.MemberService.GetMember:output_type -> api.MemberResponse
 	13, // 41: api.MemberService.GetMembers:output_type -> api.MembersResponse
 	12, // 42: api.MemberService.UpdateMember:output_type -> api.MemberResponse
-	12, // 43: api.MemberService.DeleteMember:output_type -> api.MemberResponse
+	28, // 43: api.MemberService.DeleteMember:output_type -> google.protobuf.Empty
 	18, // 44: api.MealService.CreateMeal:output_type -> api.MealResponse
 	18, // 45: api.MealService.GetMeal:output_type -> api.MealResponse
 	19, // 46: api.MealService.GetMeals:output_type -> api.MealsResponse
 	18, // 47: api.MealService.UpdateMeal:output_type -> api.MealResponse
-	18, // 48: api.MealService.DeleteMeal:output_type -> api.MealResponse
+	28, // 48: api.MealService.DeleteMeal:output_type -> google.protobuf.Empty
 	24, // 49: api.EventService.CreateEvent:output_type -> api.EventResponse
 	24, // 50: api.EventService.GetEvent:output_type -> api.EventResponse
 	25, // 51: api.EventService.GetEvents:output_type -> api.EventsResponse
 	24, // 52: api.EventService.UpdateEvent:output_type -> api.EventResponse
-	24, // 53: api.EventService.DeleteEvent:output_type -> api.EventResponse
+	28, // 53: api.EventService.DeleteEvent:output_type -> google.protobuf.Empty
 	34, // [34:54] is the sub-list for method output_type
 	14, // [14:34] is the sub-list for method input_type
 	14, // [14:14] is the sub-list for extension type_name
