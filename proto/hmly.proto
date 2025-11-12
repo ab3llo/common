@@ -1,293 +1,448 @@
+// Proto3 syntax definition for the HMLY (Home Life) family management API.
+// This file defines the gRPC services and message types for managing
+// households, members, meals, and events.
 syntax = "proto3";
 
+// Go package import path for the generated Go code.
 option go_package = "github.com/hmlylab/common/proto";
 
+// Import Google API annotations for HTTP/JSON transcoding (gRPC Gateway)
 import "google/api/annotations.proto";
+// Import Google's Empty message type for void responses
+import "google/protobuf/empty.proto";
 
+// Package namespace for all services and messages
 package api;
 
+// HouseholdService manages household entities within the HMLY system.
+// A household represents a family unit or group of people living together.
 service HouseholdService {
+    // CreateHousehold creates a new household with the specified name.
+    // Returns the newly created household with its assigned ID.
     rpc CreateHousehold(CreateHouseholdRequest) returns (HouseholdResponse) {
         option (google.api.http) = {
             post: "/v1/households"
             body: "*"
         };
     };
+    
+    // GetHousehold retrieves a specific household by its unique ID.
+    // Returns the household details if found.
     rpc GetHousehold(GetHouseholdRequest) returns (HouseholdResponse) {
         option (google.api.http) = {
             get: "/v1/households/{id}"
         };
     };
+    
+    // GetHouseholds retrieves a paginated list of households.
+    // Supports pagination through offset and limit parameters.
     rpc GetHouseholds(GetHouseHoldsRequest) returns (HouseholdsResponse){
         option (google.api.http) = {
             get: "/v1/households"
         };
     };
+    
+    // UpdateHousehold modifies an existing household's properties.
+    // Updates the household identified by the provided ID.
     rpc UpdateHousehold(UpdateHouseholdRequest) returns (HouseholdResponse){
         option (google.api.http) = {
             put: "/v1/households/{id}"
             body: "*"
         };
     };
-    rpc DeleteHousehold(GetHouseholdRequest) returns (HouseholdResponse){
+    
+    // DeleteHousehold removes a household from the system.
+    // This operation may cascade to related entities.
+    rpc DeleteHousehold(GetHouseholdRequest) returns (google.protobuf.Empty){
         option (google.api.http) = {
             delete: "/v1/households/{id}"
         };
     };
 }
 
+// MemberService manages membership relationships between users and households.
+// Members represent the association of users with specific households.
 service MemberService {
+    // CreateMember adds a user to a household as a member.
+    // Creates the membership relationship between user and household.
     rpc CreateMember(CreateMemberRequest) returns (MemberResponse){
         option (google.api.http) = {
             post: "/v1/members"
             body: "*"
         };
     };
+    
+    // GetMember retrieves a specific member by their unique ID.
+    // Returns the member details including household and user associations.
     rpc GetMember(GetMemberRequest) returns (MemberResponse){
         option (google.api.http) = {
             get: "/v1/members/{id}"
         };
     };
+    
+    // GetMembers retrieves all members belonging to a specific household.
+    // Returns a list of all users who are members of the household.
     rpc GetMembers(GetMembersRequest) returns (MembersResponse){
         option (google.api.http) = {
             get: "/v1/members/household/{household_id}"
         };
     };
+    
+    // UpdateMember modifies an existing member's association.
+    // Can change the household or user ID for the membership.
     rpc UpdateMember(UpdateMemberRequest) returns (MemberResponse){
         option (google.api.http) = {
             put: "/v1/members/{id}"
             body: "*"
         };
     };
-    rpc DeleteMember(GetMemberRequest) returns (MemberResponse){
+    
+    // DeleteMember removes a user's membership from a household.
+    // Breaks the association between the user and household.
+    rpc DeleteMember(GetMemberRequest) returns (google.protobuf.Empty){
         option (google.api.http) = {
             delete: "/v1/members/{id}"
         };
     };
 }
 
+// MealService manages meal planning and tracking within households.
+// Meals represent food-related events, recipes, or planned dining activities.
 service MealService {
+    // CreateMeal adds a new meal to a household's meal plan.
+    // Associates the meal with a specific household for organization.
     rpc CreateMeal(CreateMealRequest) returns (MealResponse){
         option (google.api.http) = {
             post: "/v1/meals"
             body: "*"
         };
     };
+    
+    // GetMeal retrieves a specific meal by its unique ID.
+    // Returns detailed information about the meal including household association.
     rpc GetMeal(GetMealRequest) returns (MealResponse){
         option (google.api.http) = {
             get: "/v1/meals/{id}"
         };
     };
+    
+    // GetMeals retrieves all meals for a specific household.
+    // Returns the complete meal plan for the household.
     rpc GetMeals(GetMealsRequest) returns (MealsResponse){
         option (google.api.http) = {
             get: "/v1/meals/household/{household_id}"
         };
     };
+    
+    // UpdateMeal modifies an existing meal's details.
+    // Can change meal name, household association, or other properties.
     rpc UpdateMeal(UpdateMealRequest) returns (MealResponse){
         option (google.api.http) = {
             put: "/v1/meals/{id}"
             body: "*"
         };
     };
-    rpc DeleteMeal(GetMealRequest) returns (MealResponse){
+    
+    // DeleteMeal removes a meal from the household's meal plan.
+    // Permanently deletes the meal record from the system.
+    rpc DeleteMeal(GetMealRequest) returns (google.protobuf.Empty){
         option (google.api.http) = {
             delete: "/v1/meals/{id}"
         };
     };
 }
 
+// EventService manages scheduled events and activities within the HMLY system.
+// Events can be associated with any entity type (households, meals, members, etc.)
+// and support assignment to specific users with start/end date tracking.
 service EventService {
+    // CreateEvent schedules a new event in the system.
+    // Events can be linked to any entity and assigned to specific users.
     rpc CreateEvent(CreateEventRequest) returns (EventResponse){
         option (google.api.http) = {
             post: "/v1/events"
             body: "*"
         };
     };
+    
+    // GetEvent retrieves a specific event by its unique ID.
+    // Returns complete event details including entity associations and assignments.
     rpc GetEvent(GetEventRequest) returns (EventResponse){
         option (google.api.http) = {
             get: "/v1/events/{id}"
         };
     };
+    
+    // GetEvents retrieves a filtered list of events.
+    // Supports filtering by entity type and pagination through offset/limit.
     rpc GetEvents(GetEventsRequest) returns (EventsResponse){
         option (google.api.http) = {
             get: "/v1/events"
         };
     };
+    
+    // UpdateEvent modifies an existing event's properties.
+    // Can update name, dates, assignments, or entity associations.
     rpc UpdateEvent(UpdateEventRequest) returns (EventResponse){
         option (google.api.http) = {
             put: "/v1/events/{id}"
             body: "*"
         };
     };
-    rpc DeleteEvent(GetEventRequest) returns (EventResponse){
+    
+    // DeleteEvent removes an event from the system.
+    // Permanently deletes the event and all its associations.
+    rpc DeleteEvent(GetEventRequest) returns (google.protobuf.Empty){
         option (google.api.http) = {
             delete: "/v1/events/{id}"
         };
     };
 }   
 
+// =============================================================================
+// HOUSEHOLD MESSAGE TYPES
+// Messages for managing household entities and operations
+// =============================================================================
+
+// CreateHouseholdRequest is used to create a new household.
+// Only requires a name to establish the household identity.
 message CreateHouseholdRequest {
-    string name = 1;
+    string name = 1;  // Display name for the household (e.g., "The Smith Family")
 }
 
+// GetHouseholdRequest is used to retrieve a specific household.
+// Uses the household's unique identifier for lookup.
 message GetHouseholdRequest {
-    string id = 1;
+    string id = 1;  // Unique identifier of the household to retrieve
 }
 
+// GetHouseHoldsRequest is used for paginated household listing.
+// Supports standard offset/limit pagination patterns.
 message GetHouseHoldsRequest {
-    int32 offset = 1;
-    int32 limit = 2;
+    int32 offset = 1;  // Number of households to skip (for pagination)
+    int32 limit = 2;   // Maximum number of households to return
 }
 
+// UpdateHouseholdRequest is used to modify an existing household.
+// Requires the household ID and new property values.
 message UpdateHouseholdRequest {
-    string id = 1;
-    string name = 2;
+    string id = 1;    // Unique identifier of the household to update
+    string name = 2;  // New display name for the household
 }
 
+// CreateHouseholdResponse is returned after successfully creating a household.
+// Contains the new household's assigned ID and confirmation of the name.
 message CreateHouseholdResponse {
-    string id = 1;
-    string name = 2;
-    optional Error error_message = 3;
+    string id = 1;                        // Auto-generated unique identifier
+    string name = 2;                      // Confirmed household name
+    optional Error error_message = 3;     // Error details if creation failed
 }
 
+// HouseholdResponse represents a complete household entity.
+// Used for single household retrieval and update operations.
 message HouseholdResponse {
-    string id = 1;
-    string name = 2;
-    optional Error error_message = 3;
-    string created_at = 4;
-    string updated_at = 5;
+    string id = 1;                        // Unique identifier
+    string name = 2;                      // Display name of the household
+    optional Error error_message = 3;     // Error details if operation failed
+    string created_at = 4;                // ISO 8601 timestamp of creation
+    string updated_at = 5;                // ISO 8601 timestamp of last update
 }
 
+// Error represents standardized error information across all services.
+// Provides both machine-readable codes and human-readable messages.
 message Error {
-    int32 code = 1;
-    string message = 2;
+    int32 code = 1;      // Numeric error code (HTTP-style or custom)
+    string message = 2;  // Human-readable error description
 }
 
+// HouseholdsResponse represents a paginated list of households.
+// Used for bulk household retrieval operations.
 message HouseholdsResponse {
-    repeated HouseholdResponse households = 1;
-    optional Error error_message = 2;
+    repeated HouseholdResponse households = 1;  // Array of household entities
+    optional Error error_message = 2;           // Error details if operation failed
 }
 
+// =============================================================================
+// MEMBER MESSAGE TYPES
+// Messages for managing household membership relationships
+// =============================================================================
+
+// CreateMemberRequest establishes a membership relationship.
+// Links a user to a household, creating the member association.
 message CreateMemberRequest {
-    string household_id = 1;
-    string user_id = 2;
+    string household_id = 1;  // ID of the household to join
+    string user_id = 2;       // ID of the user becoming a member
 }
 
+// GetMemberRequest retrieves a specific member by their unique ID.
+// Used for single member lookup operations.
 message GetMemberRequest {
-    string id = 1;
+    string id = 1;  // Unique identifier of the member to retrieve
 }
 
+// GetMembersRequest retrieves all members of a specific household.
+// Returns the complete membership roster for the household.
 message GetMembersRequest {
-    string household_id = 1;
+    string household_id = 1;  // ID of the household to get members for
 }
 
+// UpdateMemberRequest modifies an existing member's associations.
+// Can change household or user relationships for the member.
 message UpdateMemberRequest {
-    string id = 1;
-    string household_id = 2;
-    string user_id = 3;
+    string id = 1;            // Unique identifier of the member to update
+    string household_id = 2;  // New household ID (if changing households)
+    string user_id = 3;       // New user ID (if changing user association)
 }
 
+// MemberResponse represents a complete member entity.
+// Contains all relationship information between user and household.
 message MemberResponse {
-    string id = 1;
-    string household_id = 2;
-    string user_id = 3;
-    optional Error error_message = 4;
-    string created_at = 5;
-    string updated_at = 6;
+    string id = 1;                        // Unique member identifier
+    string household_id = 2;              // ID of the associated household
+    string user_id = 3;                   // ID of the associated user
+    optional Error error_message = 4;     // Error details if operation failed
+    string created_at = 5;                // ISO 8601 timestamp of membership creation
+    string updated_at = 6;                // ISO 8601 timestamp of last update
 }
 
+// MembersResponse represents a list of household members.
+// Used for bulk member retrieval operations.
 message MembersResponse {
-    repeated MemberResponse members = 1;
-    optional Error error_message = 2;
+    repeated MemberResponse members = 1;  // Array of member entities
+    optional Error error_message = 2;     // Error details if operation failed
 }
 
+// =============================================================================
+// MEAL MESSAGE TYPES
+// Messages for managing meal planning and food-related activities
+// =============================================================================
+
+// CreateMealRequest creates a new meal entry for a household.
+// Associates the meal with a specific household for organization.
 message CreateMealRequest {
-    string name = 1;
-    string household_id = 2;
-}   
+    string name = 1;          // Name or description of the meal
+    string household_id = 2;  // ID of the household this meal belongs to
+}
 
-
+// GetMealRequest retrieves a specific meal by its unique ID.
+// Used for single meal lookup operations.
 message GetMealRequest {
-    string id = 1;
+    string id = 1;  // Unique identifier of the meal to retrieve
 }
 
+// GetMealsRequest retrieves all meals for a specific household.
+// Returns the complete meal plan for the household.
 message GetMealsRequest {
-    string household_id = 1;
+    string household_id = 1;  // ID of the household to get meals for
 }
 
+// UpdateMealRequest modifies an existing meal's properties.
+// Can change meal details or household association.
 message UpdateMealRequest {
-    string id = 1;
-    string name = 2;
-    string household_id = 4;
+    string id = 1;            // Unique identifier of the meal to update
+    string name = 2;          // New name or description for the meal
+    string household_id = 4;  // New household ID (if moving between households)
 }
 
+// MealResponse represents a complete meal entity.
+// Contains all meal details and household association information.
 message MealResponse {
-    string id = 1;
-    string name = 2;
-    string household_id = 3;
-    optional Error error_message = 4;
-    string created_at = 5;
-    string updated_at = 6;
+    string id = 1;                        // Unique meal identifier
+    string name = 2;                      // Name or description of the meal
+    string household_id = 3;              // ID of the associated household
+    optional Error error_message = 4;     // Error details if operation failed
+    string created_at = 5;                // ISO 8601 timestamp of meal creation
+    string updated_at = 6;                // ISO 8601 timestamp of last update
 }
 
+// MealsResponse represents a list of meals for a household.
+// Used for bulk meal retrieval operations.
 message MealsResponse {
-    repeated MealResponse meals = 1;
-    optional Error error_message = 2;
+    repeated MealResponse meals = 1;   // Array of meal entities
+    optional Error error_message = 2;  // Error details if operation failed
 }
 
+// =============================================================================
+// EVENT MESSAGE TYPES
+// Messages for managing scheduled events and activities
+// Events provide a flexible system for tracking time-based activities
+// that can be associated with any entity type in the system
+// =============================================================================
+
+// CreateEventRequest creates a new scheduled event.
+// Events are flexible and can be associated with any entity type.
 message CreateEventRequest {
-    string name = 1;
-    string entity_id = 2;
-    string entity_type = 3;
-    string start_date = 4;
-    string end_date = 5;
-    string assigned_to = 6;
+    string name = 1;          // Descriptive name for the event
+    string entity_id = 2;     // ID of the entity this event relates to
+    string entity_type = 3;   // Type of entity (e.g., "household", "meal", "member")
+    string start_date = 4;    // ISO 8601 start date/time for the event
+    string end_date = 5;      // ISO 8601 end date/time for the event
+    string assigned_to = 6;   // User ID of the person assigned to this event
 }
 
+// GetEventRequest retrieves a specific event by its unique ID.
+// Used for single event lookup operations.
 message GetEventRequest {
-    string id = 1;
-}   
+    string id = 1;  // Unique identifier of the event to retrieve
+}
 
+// GetEventsRequest retrieves a filtered list of events.
+// Supports filtering by entity type and pagination.
 message GetEventsRequest {
-    optional string entityType = 1;
-    optional int32 offset = 2;
-    optional int32 limit = 3;
+    optional string entityType = 1;  // Filter events by entity type (optional)
+    optional int32 offset = 2;       // Number of events to skip (for pagination)
+    optional int32 limit = 3;        // Maximum number of events to return
 }
 
+// UpdateEventRequest modifies an existing event's properties.
+// Can update any aspect of the event including dates and assignments.
 message UpdateEventRequest {
-    string id = 1;
-    string name = 2;
-    string entity_id = 3;
-    string entity_type = 4;
-    string start_date = 5;
-    string end_date = 6;
-    string assigned_to = 7;
+    string id = 1;            // Unique identifier of the event to update
+    string name = 2;          // New descriptive name for the event
+    string entity_id = 3;     // New entity ID (if changing associations)
+    string entity_type = 4;   // New entity type (if changing associations)
+    string start_date = 5;    // New ISO 8601 start date/time
+    string end_date = 6;      // New ISO 8601 end date/time
+    string assigned_to = 7;   // New user ID for assignment
 }
 
+// EventResponse represents a complete event entity.
+// Contains all event details including scheduling and assignment information.
 message EventResponse {
-    string id = 1;
-    string name = 2;
-    string entity_id = 3;
-    string entity_type = 4;
-    string start_date = 5;
-    string end_date = 6;
-    string assigned_to = 7;
-    optional Error error_message = 8;
-    string created_at = 9;
-    string updated_at = 10;
+    string id = 1;                        // Unique event identifier
+    string name = 2;                      // Descriptive name of the event
+    string entity_id = 3;                 // ID of the associated entity
+    string entity_type = 4;               // Type of the associated entity
+    string start_date = 5;                // ISO 8601 start date/time
+    string end_date = 6;                  // ISO 8601 end date/time
+    string assigned_to = 7;               // User ID of the assigned person
+    optional Error error_message = 8;     // Error details if operation failed
+    string created_at = 9;                // ISO 8601 timestamp of event creation
+    string updated_at = 10;               // ISO 8601 timestamp of last update
 }
 
+// EventsResponse represents a list of events.
+// Used for bulk event retrieval and filtered query operations.
 message EventsResponse {
-    repeated EventResponse events = 1;
-    optional Error error_message = 2;
+    repeated EventResponse events = 1;  // Array of event entities
+    optional Error error_message = 2;   // Error details if operation failed
 }
 
-message VerifyTokenRequest {
-    string token = 1;
-}   
+// =============================================================================
+// AUTHENTICATION MESSAGE TYPES
+// Messages for token verification and authentication operations
+// =============================================================================
 
+// VerifyTokenRequest validates an authentication token.
+// Used to confirm token validity and extract user information.
+message VerifyTokenRequest {
+    string token = 1;  // Authentication token to be verified
+}
+
+// VerifyTokenResponse returns the result of token verification.
+// Includes validity status and associated user information.
 message VerifyTokenResponse {
-    bool valid = 1;
-    string user_id = 2;
-    optional Error error_message = 3;
+    bool valid = 1;                       // Whether the token is valid
+    string user_id = 2;                   // User ID associated with the token (if valid)
+    optional Error error_message = 3;     // Error details if verification failed
 }
